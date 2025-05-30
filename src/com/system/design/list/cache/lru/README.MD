@@ -1,4 +1,4 @@
-Design LRU Cache
+<b> Design LRU Cache </b>
 
 Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
 
@@ -41,6 +41,3 @@ Constraints:
 At most 2 * 105 calls will be made to get and put.
 
 ```
-
-
- recentUsed ->   10 -> leastUsed
