@@ -14,7 +14,6 @@ public class StackUsingLinkedList<T> implements Stack<T> {
         this.size = 0;
     }
 
-
     @Override
     public void push(T input) {
         LinkedList<T> newNode = new LinkedList<>(input);
