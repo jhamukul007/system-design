@@ -24,7 +24,7 @@ public class RoundRobinAlgorithm<T> {
 
     public T get() {
         if (this.current == null) {
-            return null;
+            throw new IllegalStateException("No elements in round robin queue");
         }
         LinkedList<T> node = current;
         current = current.getNext();
