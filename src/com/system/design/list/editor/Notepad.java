@@ -1,18 +1,18 @@
 package com.system.design.list.editor;
 
-import com.system.design.utils.DoublyLinkedList;
+import com.system.design.utils.DoublyLinkedNode;
 
 public class Notepad {
-    private DoublyLinkedList<Character> content;
-    private DoublyLinkedList<Character> currentPosition;
+    private DoublyLinkedNode<Character> content;
+    private DoublyLinkedNode<Character> currentPosition;
 
     public Notepad() {
-        this.content = new DoublyLinkedList<>(null);
+        this.content = new DoublyLinkedNode<>(null);
         this.currentPosition = content;
     }
 
     public Notepad write(Character text) {
-        DoublyLinkedList<Character> newNode = new DoublyLinkedList<>(text);
+        DoublyLinkedNode<Character> newNode = new DoublyLinkedNode<>(text);
         currentPosition.setNext(newNode);
         newNode.setPrevious(currentPosition);
         currentPosition = newNode;
@@ -35,7 +35,7 @@ public class Notepad {
 
     public Notepad content() {
         StringBuilder contentOutput = new StringBuilder();
-        DoublyLinkedList<Character> current = content.getNext();
+        DoublyLinkedNode<Character> current = content.getNext();
 
         while (current != null) {
             if (current == currentPosition) {
