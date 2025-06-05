@@ -1,11 +1,11 @@
 package com.system.design.utils;
 
-public class DoublyLinkedList<T> {
+public class DoublyLinkedNode<T> {
     private T data;
-    private DoublyLinkedList previous;
-    private DoublyLinkedList next;
+    private DoublyLinkedNode previous;
+    private DoublyLinkedNode next;
 
-    public DoublyLinkedList(T data) {
+    public DoublyLinkedNode(T data) {
         this.data = data;
     }
 
@@ -17,19 +17,19 @@ public class DoublyLinkedList<T> {
         this.data = data;
     }
 
-    public DoublyLinkedList getPrevious() {
+    public DoublyLinkedNode getPrevious() {
         return previous;
     }
 
-    public void setPrevious(DoublyLinkedList previous) {
+    public void setPrevious(DoublyLinkedNode previous) {
         this.previous = previous;
     }
 
-    public DoublyLinkedList getNext() {
+    public DoublyLinkedNode getNext() {
         return next;
     }
 
-    public void setNext(DoublyLinkedList next) {
+    public void setNext(DoublyLinkedNode next) {
         this.next = next;
     }
 }

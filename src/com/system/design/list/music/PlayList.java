@@ -1,35 +1,35 @@
 package com.system.design.list.music;
 
-import com.system.design.utils.DoublyLinkedList;
+import com.system.design.utils.DoublyLinkedNode;
 
 import java.util.Objects;
 
 public class PlayList {
 
     private String name;
-    private DoublyLinkedList<Song> songs;
-    private DoublyLinkedList<Song> lastSong;
-    private DoublyLinkedList<Song> currentSong;
+    private DoublyLinkedNode<Song> songs;
+    private DoublyLinkedNode<Song> lastSong;
+    private DoublyLinkedNode<Song> currentSong;
 
     public PlayList(String name) {
-        this.songs = new DoublyLinkedList<>(null);
+        this.songs = new DoublyLinkedNode<>(null);
         lastSong = songs;
     }
 
     public void addSong(Song song) {
-        DoublyLinkedList<Song> newSong = new DoublyLinkedList<>(song);
+        DoublyLinkedNode<Song> newSong = new DoublyLinkedNode<>(song);
         newSong.setPrevious(lastSong);
         lastSong.setNext(newSong);
         lastSong = newSong;
     }
 
     public void removeSong(Song song) {
-        DoublyLinkedList<Song> current = songs;
+        DoublyLinkedNode<Song> current = songs;
 
         while (current != null) {
             if (Objects.equals(current.getData(), song)) {
-                DoublyLinkedList<Song> prev = current.getPrevious();
-                DoublyLinkedList<Song> next = current.getNext();
+                DoublyLinkedNode<Song> prev = current.getPrevious();
+                DoublyLinkedNode<Song> next = current.getNext();
 
                 if (prev != null) {
                     prev.setNext(next);
