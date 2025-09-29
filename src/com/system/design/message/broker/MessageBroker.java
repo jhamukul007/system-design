@@ -11,21 +11,25 @@ import static java.lang.String.format;
 public class MessageBroker<T> implements Broker<T> {
 
     private final Map<String, PriorityBlockingQueue<T>> topicQueueMapper;
-    private final Map<String, PriorityBlockingQueue<T>> topicDLQMapper;
+    private final Map<String, PriorityBlockingQueue<T>> topicDLQQueueMapper;
+    private final Map<String, String> topicAndDLQMapper;
 
     public MessageBroker() {
+        this.topicAndDLQMapper = new ConcurrentHashMap<>();
         // to avoid currency risk using concurrent hash map
         this.topicQueueMapper = new ConcurrentHashMap<>();
-        this.topicDLQMapper = new ConcurrentHashMap<>();
+        this.topicDLQQueueMapper = new ConcurrentHashMap<>();
     }
 
     @Override
     public void publish(String topic, T message) throws InterruptedException {
         PriorityBlockingQueue<T> queue = topicQueueMapper.get(topic);
-        queue = null;
-//        if (queue == null) {
-//            throw new TopicNotFoundException(format("Topic with name %s not found", topic));
-//        }
+
+        if (queue == null) {
+            throw new TopicNotFoundException(format("Topic with name %s not found", topic));
+        }
+        // This is used when we want to test dlq flow
+        //queue = null;
         try {
             queue.put(message);
         } catch (Exception e) {
@@ -49,7 +53,6 @@ public class MessageBroker<T> implements Broker<T> {
         if (queue == null) {
             topicQueueMapper.put(topic, new PriorityBlockingQueue<>());
         }
-
     }
 
     @Override
@@ -58,20 +61,25 @@ public class MessageBroker<T> implements Broker<T> {
     }
 
     @Override
-    public void registerDLQ(String topic) {
-        PriorityBlockingQueue<T> queue = topicDLQMapper.get(topic);
+    public void registerDLQ(String topic, String dlqTopic) {
+        String dlQTopic = topicAndDLQMapper.get(topic);
+        if (dlQTopic == null) {
+            dlQTopic = dlqTopic;
+        }
+        topicAndDLQMapper.put(topic, dlQTopic);
+        PriorityBlockingQueue<T> queue = topicDLQQueueMapper.get(dlqTopic);
         if (queue == null) {
-            topicDLQMapper.put(topic, new PriorityBlockingQueue<>());
+            topicDLQQueueMapper.put(topic, new PriorityBlockingQueue<>());
         }
     }
 
     @Override
     public void removeDLQ(String topic) {
-        topicDLQMapper.remove(topic);
+        topicDLQQueueMapper.remove(topic);
     }
 
     private void publishToDLQ(String topic, T message) {
-        PriorityBlockingQueue<T> queue = topicDLQMapper.get(topic);
+        PriorityBlockingQueue<T> queue = topicDLQQueueMapper.get(topic);
         if (queue == null) {
             throw new TopicNotFoundException(format("Topic with name %s not found", topic));
         }

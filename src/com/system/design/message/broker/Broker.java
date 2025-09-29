@@ -6,6 +6,6 @@ public interface Broker<T> {
     void registerTopic(String topic);
     void removeTopic(String topic);
 
-    void registerDLQ(String topic);
+    void registerDLQ(String topic, String dlqTopic);
     void removeDLQ(String topic);
 }

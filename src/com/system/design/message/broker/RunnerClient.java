@@ -2,8 +2,6 @@ package com.system.design.message.broker;
 
 import com.system.design.message.broker.exceptions.InvalidInputException;
 
-import javax.sound.midi.Soundbank;
-import javax.swing.plaf.TableHeaderUI;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +14,7 @@ public class RunnerClient {
         List<String> topics = List.of("sms", "email");
         List<String> dlqTopics = List.of("sms.DLQ", "email.DLQ");
         topics.forEach(messageBroker::registerTopic);
-        topics.forEach(messageBroker::registerDLQ);
+        dlqTopics.forEach(dlqTopic -> messageBroker.registerDLQ(topics.get(0), dlqTopic));
         Producer<Message> producer = new ProducerImpl<>(messageBroker);
 
         Scanner scanner = new Scanner(System.in);
